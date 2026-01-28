@@ -1,0 +1,60 @@
+# 📊 UNEMPLOYMENT ANALYSIS PROJECT
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 📂 Load Dataset
+data = pd.read_csv('/mnt/data/Unemployment in India (1).csv')
+
+print("First 5 Rows:\n", data.head())
+print("\nDataset Info:\n")
+print(data.info())
+
+# 🧹 Data Cleaning
+data.columns = data.columns.str.strip()   # Remove extra spaces in column names
+data.dropna(inplace=True)                 # Remove missing values
+
+# Convert Date column to datetime
+data['Date'] = pd.to_datetime(data['Date'], dayfirst=True)
+
+# 📊 Basic Statistics
+print("\nStatistical Summary:\n", data.describe())
+
+# 📈 Unemployment Rate Over Time
+plt.figure(figsize=(10,5))
+sns.lineplot(data=data, x='Date', y='Estimated Unemployment Rate (%)')
+plt.title("Unemployment Rate Over Time")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# 🦠 Impact of COVID-19 (Year-wise comparison)
+data['Year'] = data['Date'].dt.year
+
+plt.figure(figsize=(8,5))
+sns.boxplot(x='Year', y='Estimated Unemployment Rate (%)', data=data)
+plt.title("Year-wise Unemployment Rate (COVID Impact Visible)")
+plt.show()
+
+# 🌍 Unemployment by Region
+plt.figure(figsize=(10,6))
+sns.barplot(x='Region', y='Estimated Unemployment Rate (%)', data=data)
+plt.title("Unemployment Rate by Region")
+plt.xticks(rotation=45)
+plt.show()
+
+# 📅 Seasonal Trend (Month-wise)
+data['Month'] = data['Date'].dt.month
+
+plt.figure(figsize=(8,5))
+sns.boxplot(x='Month', y='Estimated Unemployment Rate (%)', data=data)
+plt.title("Monthly Seasonal Unemployment Trend")
+plt.show()
+
+# 📌 Insights Display
+print("\nKey Insights:")
+print("- Trend of unemployment rate over time visualized.")
+print("- COVID-19 period shows noticeable variation.")
+print("- Regional differences in unemployment observed.")
+print("- Seasonal (monthly) patterns identified.")
